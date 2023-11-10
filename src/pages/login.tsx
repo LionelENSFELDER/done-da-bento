@@ -6,7 +6,12 @@ import TextField from '@mui/material/TextField';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import Button from '@mui/material/Button';
 
+console.log(firebaseApp, firebaseAuth)
+
 function LoginPage() {
+  const [mail, setMail] = useState('')
+  const [password, setPassword] = useState('')
+  const [title, setTitle] = useState('unknow user')
   const authUser = () => {
     console.log('authUser')
     const auth = getAuth();
@@ -15,6 +20,9 @@ function LoginPage() {
         // Signed in 
         const user = userCredential.user;
         console.log('user credential', user)
+        if (user) {
+          setTitle('User mail is ' + user.email + '.')
+        }
         // ...
       })
       .catch((error) => {
@@ -22,10 +30,6 @@ function LoginPage() {
         const errorMessage = error.message;
       });
   }
-  console.log(firebaseApp, firebaseAuth)
-  const [mail, setMail] = useState('')
-  const [password, setPassword] = useState('')
-  const [title, setTitle] = useState('unknow user')
   return (
     <>
       <h1>{title}</h1>

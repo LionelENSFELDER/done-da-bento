@@ -1,33 +1,47 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import firebaseApp from '../adapters/firebase';
 import firebaseAuth from '../adapters/firebase';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, setPersistence, signInWithEmailAndPassword, browserSessionPersistence } from "firebase/auth";
 import Button from '@mui/material/Button';
+import { GlobalContext } from '../context'
 
 console.log(firebaseApp, firebaseAuth)
 
 function LoginPage() {
+  const { userLogged } = useContext(GlobalContext)
+  const { updateUserLogged } = useContext(GlobalContext)
+
   const [mail, setMail] = useState('')
   const [password, setPassword] = useState('')
   const [title, setTitle] = useState('unknow user')
   const authUser = () => {
-    console.log('authUser')
+
     const auth = getAuth();
-    signInWithEmailAndPassword(auth, mail, password)
-      .then((userCredential) => {
-        // Signed in 
-        const user = userCredential.user;
-        console.log('user credential', user)
-        if (user) {
-          setTitle('User mail is ' + user.email + '.')
-        }
-        // ...
+    setPersistence(auth, browserSessionPersistence)
+      .then(() => {
+
+        signInWithEmailAndPassword(auth, mail, password)
+          .then((userCredential) => {
+            // Signed in 
+            const user = userCredential.user;
+            updateUserLogged(user);
+            if (userLogged) {
+              setTitle('User mail is ' + user.email + '.')
+            }
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log('error: ', errorCode, errorMessage)
+          });
+
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+        console.log('error: ', errorCode, errorMessage)
       });
   }
   return (

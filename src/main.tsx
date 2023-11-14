@@ -1,14 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-// import App from './App.tsx'
+import { GlobalContextProvider } from './context'
+import App from './App.tsx'
 import './index.css'
 import LoginPage from './pages/login.tsx'
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <h1>Done Da Bento</h1>,
+    element: <App />,
   },
   {
     path: '/login',
@@ -18,6 +19,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <GlobalContextProvider>
+      <RouterProvider router={router} />
+    </GlobalContextProvider>
   </React.StrictMode>,
 )

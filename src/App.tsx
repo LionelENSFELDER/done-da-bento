@@ -1,13 +1,19 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+import { GlobalContext } from './context'
+import { Link } from 'react-router-dom';
+import './App.css'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
-import './App.css'
+
 
 function App() {
   const [count, setCount] = useState(0)
+  const { userLogged } = useContext(GlobalContext)
 
   return (
     <>
+      {typeof userLogged === 'string' ? <h1>User not logged</h1> : <h1>User is logged</h1>}
+      <Link to="/login">Login</Link>
       <div>
         <a href="https://vitejs.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />

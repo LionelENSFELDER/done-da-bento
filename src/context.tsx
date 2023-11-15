@@ -2,19 +2,19 @@ import { createContext, useState } from 'react'
 import { User } from "firebase/auth";
 
 type GlobalContextType = {
-  userLogged: User | string;
+  userLogged: User | null;
   updateUserLogged: (user: User) => void;
 }
 
 const defaultContextValue = {
-  userLogged: 'unknow',
+  userLogged: null,
   updateUserLogged: () => { }
 }
 
 export const GlobalContext = createContext<GlobalContextType>(defaultContextValue)
 
 export const GlobalContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const [userLogged, setUserLogged] = useState<User | string>('Anonymous')
+  const [userLogged, setUserLogged] = useState<User | null>(null!)
   const updateUserLogged = (user: User) => {
     setUserLogged(user)
   }

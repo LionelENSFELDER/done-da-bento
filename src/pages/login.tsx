@@ -1,36 +1,27 @@
-import { useState, useContext } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom';
-import { GlobalContext } from '../context'
 import { getAuth, setPersistence, signInWithEmailAndPassword, browserSessionPersistence } from "firebase/auth";
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
 function LoginPage() {
-  const { userLogged } = useContext(GlobalContext)
-  const { updateUserLogged } = useContext(GlobalContext)
-
   const [mail, setMail] = useState('')
   const [password, setPassword] = useState('')
+  const auth = getAuth();
 
   const authUser = () => {
-
-    const auth = getAuth();
     setPersistence(auth, browserSessionPersistence)
       .then(() => {
-
         signInWithEmailAndPassword(auth, mail, password)
           .then((userCredential) => {
-            // Signed in 
             const user = userCredential.user;
-            updateUserLogged(user);
           })
           .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
             console.log('error: ', errorCode, errorMessage)
           });
-
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -41,7 +32,7 @@ function LoginPage() {
   return (
     <>
       <Link to="/">Home</Link>
-      {typeof userLogged === 'string' ? <h1>User not logged</h1> : <h1>User is logged</h1>}
+      {auth.currentUser && auth.currentUser !== null ? <h1>User is logged</h1> : <h1>User not logged</h1>}
       <Box
         component="form"
         sx={{

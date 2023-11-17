@@ -1,17 +1,18 @@
 import { getAuth, updateProfile } from "firebase/auth"
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 
 const AccountPage = () => {
   const auth = getAuth();
+  const navigate = useNavigate()
 
   const updateUserProfile = () => {
     if (auth.currentUser !== null) {
       updateProfile(auth.currentUser, {
-        displayName: "Liam 1", photoURL: "https://placehold.co/80"
+        displayName: "Liam", photoURL: "https://placehold.co/80"
       }).then(() => {
-        // TODO: reload page to display changes
+        navigate('/account')
         console.log('account page reload')
       }).catch((error) => {
         console.log('error: ', error)

@@ -8,8 +8,12 @@ import Button from '@mui/material/Button';
 function LoginPage() {
   const [mail, setMail] = useState('')
   const [password, setPassword] = useState('')
-  const auth = getAuth();
+  const auth = getAuth()
   const navigate = useNavigate()
+
+  if (auth.currentUser !== null) {
+    navigate('/')
+  }
 
   const authUser = () => {
     setPersistence(auth, browserSessionPersistence)
@@ -60,7 +64,7 @@ function LoginPage() {
           variant="outlined"
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => { setPassword(event.target.value) }}
         />
-        <Button variant="text" onClick={() => authUser()}>Text</Button>
+        <Button variant="contained" onClick={() => authUser()}>Login</Button>
       </Box>
     </>
   )

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getAuth, setPersistence, signInWithEmailAndPassword, browserSessionPersistence } from "firebase/auth";
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -9,6 +9,7 @@ function LoginPage() {
   const [mail, setMail] = useState('')
   const [password, setPassword] = useState('')
   const auth = getAuth();
+  const navigate = useNavigate()
 
   const authUser = () => {
     setPersistence(auth, browserSessionPersistence)
@@ -16,6 +17,9 @@ function LoginPage() {
         signInWithEmailAndPassword(auth, mail, password)
           .then((userCredential) => {
             const user = userCredential.user;
+            if (user !== null) {
+              navigate('/')
+            }
           })
           .catch((error) => {
             const errorCode = error.code;
